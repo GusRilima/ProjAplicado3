@@ -1,8 +1,8 @@
 # Projeto Aplicado III – Universidade Presbiteriana Mackenzie – 2026
 
-🎵 Sistema de Recomendação de Músicas Baseado em Similaridade de Características de Áudio
+Sistema de Recomendação de Músicas Baseado em Similaridade de Características de Áudio
 
-## 📖 Sobre o Projeto
+##  Sobre o Projeto
 
 Os sistemas de recomendação estão cada vez mais presentes nas plataformas digitais, auxiliando os usuários na descoberta de novos conteúdos. Em plataformas de streaming musical, como o Spotify, existem milhões de faixas, o que torna praticamente impossível para o usuário conhecer e explorar todas as opções disponíveis sem o auxílio de recomendações automáticas.
 
@@ -10,7 +10,7 @@ Este projeto propõe o desenvolvimento de um sistema de recomendação de músic
 
 O projeto também está alinhado aos Objetivos de Desenvolvimento Sustentável (ODS), especificamente o ODS 9 (Indústria, Inovação e Infraestrutura) e ODS 10 (Redução das Desigualdades), ao diversificar a descoberta de artistas além daqueles de grande popularidade.
 
-## 🎯 Objetivos
+##  Objetivos
 
 **Objetivo Geral**
 Desenvolver um sistema de recomendação de músicas capaz de identificar e sugerir faixas semelhantes a partir de uma música de referência escolhida pelo usuário, utilizando a análise e a comparação de características de áudio presentes nas músicas.
@@ -22,7 +22,7 @@ Desenvolver um sistema de recomendação de músicas capaz de identificar e suge
 - **Avaliação:** Medir a qualidade das recomendações geradas, considerando a similaridade com a música de referência, a diversidade das sugestões e a cobertura de gêneros musicais.
 - **Documentação:** Registrar todas as etapas do pipeline, os resultados e as limitações encontradas.
 
-## 📊 Base de Dados e Pipeline
+##  Base de Dados e Pipeline
 
 **Dataset Utilizado:** *Spotify Tracks Dataset* (via Kaggle)
 - **Volume:** ~114 mil faixas musicais e 125 gêneros.
