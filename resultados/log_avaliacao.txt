@@ -1,0 +1,21 @@
+Catálogo após tratamento: 81206 faixas, 113 gêneros
+  ok: Aleatório (baseline)
+  ok: Mais populares (baseline)
+  ok: KNN cosseno, 11 atrib. (Etapa 3)
+  ok: KNN euclidiana, 11 atrib.
+  ok: KNN cosseno, 9 atrib.
+  ok: KNN euclidiana, 9 atrib.
+  ok: Híbrido 5+5, cosseno 11 (Etapa 3)
+  ok: Híbrido 5+5, euclidiana 9 (proposto)
+
+                              Técnica  Erro acústico (MAE)  Precisão de gênero@10  Gêneros distintos@10  Popularidade média  % cauda longa  Cobertura do catálogo (%)  Tempo/consulta (ms)
+                Aleatório (baseline)                0.222                  0.009                 9.557              34.828          41.64                     11.582                0.019
+           Mais populares (baseline)                0.188                  0.005                 5.000              97.200           0.00                      0.012                0.004
+    KNN cosseno, 11 atrib. (Etapa 3)                0.047                  0.095                 7.713              34.894          41.95                     11.478                4.788
+           KNN euclidiana, 11 atrib.                0.044                  0.096                 7.775              34.936          41.73                     11.497                1.720
+               KNN cosseno, 9 atrib.                0.039                  0.100                 7.604              34.796          41.89                     11.561                4.854
+            KNN euclidiana, 9 atrib.                0.033                  0.103                 7.541              35.121          41.35                     11.475                1.982
+   Híbrido 5+5, cosseno 11 (Etapa 3)                0.054                  0.487                 5.468              34.744          41.97                     11.488               10.252
+Híbrido 5+5, euclidiana 9 (proposto)                0.039                  0.488                 5.419              34.721          41.84                     11.461                7.408
+
+Saturação do cosseno: {'sim_1o_vizinho_media': 99.69454793655902, 'sim_10o_vizinho_media': 99.35863116054881, 'pct_consultas_10o_acima_99': 85.0, 'pct_consultas_10o_acima_98': 97.5}
