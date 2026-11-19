@@ -1,56 +1,95 @@
 # Projeto Aplicado III – Universidade Presbiteriana Mackenzie – 2026
 
-Sistema de Recomendação de Músicas Baseado em Similaridade de Características de Áudio
+**Sistema de Recomendação de Músicas Baseado em Similaridade de Características de Áudio**
 
-##  Sobre o Projeto
+Integrantes: Juan Fiocchi Martins (RA 10732659) · Gustavo de Lima Ribeiro (RA 10424057) · Deborah Silvério Alves Morales (RA 10728563)
+Professora: Carolina Toledo Ferraz
 
-Os sistemas de recomendação estão cada vez mais presentes nas plataformas digitais, auxiliando os usuários na descoberta de novos conteúdos. Em plataformas de streaming musical, como o Spotify, existem milhões de faixas, o que torna praticamente impossível para o usuário conhecer e explorar todas as opções disponíveis sem o auxílio de recomendações automáticas.
+## 🎬 Vídeos
 
-Este projeto propõe o desenvolvimento de um sistema de recomendação de músicas baseado exclusivamente na similaridade entre características de áudio, como *dançabilidade, energia, valência e acusticidade*. A partir de uma música de referência informada pelo usuário, o sistema é capaz de identificar e sugerir outras faixas com características sonoras semelhantes, utilizando uma abordagem baseada em conteúdo que não depende do histórico prévio de interações do usuário.
+| Entrega | Link |
+|---|---|
+| Apresentação do projeto (5 min) | **[inserir link do YouTube]** |
+| Aplicação do projeto na comunidade | **[inserir link do YouTube]** |
 
-O projeto também está alinhado aos Objetivos de Desenvolvimento Sustentável (ODS), especificamente o ODS 9 (Indústria, Inovação e Infraestrutura) e ODS 10 (Redução das Desigualdades), ao diversificar a descoberta de artistas além daqueles de grande popularidade.
+## Sobre o projeto
 
-##  Objetivos
+Sistema de recomendação **baseado em conteúdo**: a partir de uma música escolhida pelo usuário, o sistema sugere faixas com som parecido, comparando características de áudio do Spotify (dançabilidade, energia, volume, acústica, positividade, andamento etc.). Não usa histórico de usuários nem popularidade no cálculo, o que permite recomendar artistas pouco conhecidos (ODS 9 e ODS 10).
 
-**Objetivo Geral**
-Desenvolver um sistema de recomendação de músicas capaz de identificar e sugerir faixas semelhantes a partir de uma música de referência escolhida pelo usuário, utilizando a análise e a comparação de características de áudio presentes nas músicas.
+**Base de dados:** [Spotify Tracks Dataset](https://www.kaggle.com/datasets/maharshipandya/-spotify-tracks-dataset) (Kaggle). Após remover nulos e versões repetidas (mesmo nome + artista), o catálogo final tem **81.206 faixas de 113 gêneros**.
 
-**Objetivos Específicos**
-- **Tratamento de Dados:** Realizar a coleta e o pré-processamento do *Spotify Tracks Dataset*, incluindo tratamento de valores ausentes, duplicados e normalização das variáveis numéricas.
-- **Análise Exploratória (EDA):** Analisar as principais características de áudio presentes, observando sua distribuição e diferenças entre os gêneros musicais.
-- **Modelagem:** Desenvolver abordagens de recomendação baseadas em conteúdo utilizando métodos de similaridade (como Similaridade do Cosseno) e algoritmos como K-vizinhos mais próximos (KNN) e agrupamento (K-Means).
-- **Avaliação:** Medir a qualidade das recomendações geradas, considerando a similaridade com a música de referência, a diversidade das sugestões e a cobertura de gêneros musicais.
-- **Documentação:** Registrar todas as etapas do pipeline, os resultados e as limitações encontradas.
+**Modelo final:** normalização Min-Max dos 9 atributos contínuos → K-Nearest Neighbors com distância euclidiana → regra híbrida com **5 faixas do mesmo gênero + 5 de outros gêneros**, sem versões duplicadas.
 
-##  Base de Dados e Pipeline
+## Principais resultados (1.000 consultas, Top-10)
 
-**Dataset Utilizado:** *Spotify Tracks Dataset* (via Kaggle)
-- **Volume:** ~114 mil faixas musicais e 125 gêneros.
-- **Features Analisadas:** Popularidade, duração, e características de áudio extraídas da API do Spotify (dançabilidade, energia, tom, volume, modo, fala, acusticidade, instrumentalidade, presença de audiência, valência, andamento e assinatura de tempo).
+| Técnica | Erro acústico (MAE) ↓ | Precisão de gênero@10 | Gêneros distintos | Popularidade média |
+|---|---|---|---|---|
+| Aleatório (baseline) | 0,222 | 0,9% | 9,6 | 34,8 |
+| Mais populares (baseline) | 0,188 | 0,5% | 5,0 | 97,2 |
+| KNN cosseno, 11 atributos (Etapa 3) | 0,047 | 9,5% | 7,7 | 34,9 |
+| KNN euclidiana, 9 atributos | **0,033** | **10,3%** | 7,5 | 35,1 |
+| Híbrido 5+5, cosseno 11 (Etapa 3) | 0,054 | 48,7% | 5,5 | 34,7 |
+| **Híbrido 5+5, euclidiana 9 (final)** | **0,039** | 48,8% | 5,4 | 34,7 |
 
-**Visão Geral do Pipeline:**
-1. **Coleta e Importação:** Carregamento dos dados no formato tabular (DataFrames).
-2. **Pré-processamento:** Limpeza e padronização dos dados.
-3. **Análise Exploratória:** Investigação estatística das *features* de áudio.
-4. **Modelagem:** Cálculo do grau de similaridade entre as faixas.
-5. **Geração das Recomendações:** Retorno de um conjunto de músicas similares à entrada do usuário.
-6. **Avaliação dos Resultados:** Análise de coerência e diversidade da saída.
+- O KNN deixa as recomendações **4 a 7 vezes mais próximas** do som da referência do que as baselines.
+- Trocar o cosseno pela distância euclidiana e retirar `key`/`mode` (categóricos) **reduziu o erro em ~29%**.
+- O escore do cosseno **satura** (85% das consultas com o 10º vizinho ≥ 99%), por isso deixou de ser o padrão.
+- A popularidade média das recomendações (≈34,7) é igual à do catálogo (34,6): **sem viés de popularidade**.
 
-## 🛠️ Tecnologias e Ferramentas
+Tabela completa em [`resultados/metricas_comparativas.csv`](resultados/metricas_comparativas.csv) e gráficos em [`resultados/figuras/`](resultados/figuras/).
 
-As principais tecnologias utilizadas para o desenvolvimento desta solução incluem:
-
-- **Linguagem:** Python
-- **Análise e Manipulação de Dados:** Pandas
-- **Visualização de Dados:** Matplotlib, Seaborn
-- **Machine Learning (Similaridade e Clusterização):** Scikit-learn
-- **Ambiente de Desenvolvimento:** VS Code / Jupyter Notebooks
-
-## 📂 Estrutura do Repositório
+## 📂 Estrutura do repositório
 
 ```text
-├── dataset/            # Diretório contendo o Spotify Tracks Dataset utilizado
-├── notebooks/          # Notebooks contendo EDA, pré-processamento e testes de modelos
-├── src/                # Códigos-fonte do sistema de recomendação de músicas
-├── LICENSE             # Arquivo de licença do projeto (MIT)
-└── README.md           # Documentação principal do projeto
+├── dataset/
+│   └── dataset.csv               # Spotify Tracks Dataset
+├── notebooks/
+│   └── sistema_recomendacao_v1.ipynb   # EDA e prova de conceito (Etapa 3)
+├── src/
+│   ├── recomendador.py           # carga, tratamento, modelo KNN e regra híbrida
+│   ├── avaliacao.py              # avaliação offline comparando 8 técnicas
+│   ├── graficos.py               # gera as figuras da seção Resultados
+│   └── app.py                    # aplicação de demonstração (Streamlit)
+├── resultados/
+│   ├── metricas_comparativas.csv
+│   ├── resultados.json
+│   ├── log_avaliacao.txt
+│   └── figuras/                  # fig2 a fig8 usadas na documentação
+├── docs/
+│   └── Projeto_Aplicado_III_-_Etapa_4.docx   # documentação final
+├── requirements.txt
+├── LICENSE
+└── README.md
+```
+
+## ▶️ Como executar
+
+```bash
+pip install -r requirements.txt
+
+# 1) Recomendação pelo terminal
+python src/recomendador.py dataset/dataset.csv "Master of Puppets"
+
+# 2) Aplicação web de demonstração
+streamlit run src/app.py
+
+# 3) Reproduzir a avaliação e os gráficos (~1 min)
+python src/avaliacao.py dataset/dataset.csv resultados
+python src/graficos.py dataset/dataset.csv resultados
+```
+
+Uso como biblioteca:
+
+```python
+from src.recomendador import Recomendador, FEATURES_CONTINUAS
+rec = Recomendador.from_csv("dataset/dataset.csv", features=FEATURES_CONTINUAS, metrica="euclidean")
+print(rec.recomendar_hibrido("Bohemian Rhapsody", artista="Queen"))
+```
+
+## 🛠️ Tecnologias
+
+Python · pandas · NumPy · scikit-learn (`MinMaxScaler`, `NearestNeighbors`) · Matplotlib · Seaborn · Streamlit
+
+## Limitações e trabalhos futuros
+
+Avaliação offline (sem dados de usuários), um gênero por faixa, base estática e restrição da API de *audio features* do Spotify para novas aplicações desde nov/2024. Próximos passos: calibrar o escore exibido, aprender pesos dos atributos com playlists, validar com usuários (testes A/B) e extrair características diretamente do áudio. Detalhes na documentação.
